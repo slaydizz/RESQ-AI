@@ -12,7 +12,7 @@ import {
   serverTimestamp 
 } from "firebase/firestore";
 import { MessageCircle} from 'lucide-react';
-import { MessageSquare, X, Send } from 'lucide-react'; // If you don't have lucide-react, install it or use SVG
+import { MessageSquare, X, Send } from 'lucide-react'; 
 function App() {
   
   // --- AUTH & VIEW STATES ---
@@ -32,7 +32,7 @@ function App() {
   const [volPass, setVolPass] = useState({});
   const [respondents, setRespondents] = useState([]);
   const [lockedTasks, setLockedTasks] = useState({}); // Stores { taskId: volunteerName }
-  // --- YOUR EXACT ORIGINAL STATES ---
+  
   const [assigned, setAssigned] = useState({});
   const [data, setData] = useState(null); 
   const [loading, setLoading] = useState(false);
@@ -47,8 +47,7 @@ function App() {
     "Healthcare": "Medical Consultation & Kit",
     "Water": "Clean Water Supply Logistics"
   };
-  useEffect(() => {
-    // 1. Ensure the collection name is EXACTLY "chats"
+  useEffect(() =>
     const q = query(collection(db, "chats"), orderBy("timestamp", "asc"));
 
     const unsubscribe = onSnapshot(q, { includeMetadataChanges: true }, (snapshot) => {
@@ -57,11 +56,11 @@ function App() {
         return { 
           id: doc.id, 
           ...data,
-          // Fallback so the app doesn't crash if timestamp is null for a split second
+          
           timestamp: data.timestamp || { toDate: () => new Date() } 
         };
       });
-      console.log("Messages received from Firebase:", msgs); // <--- ADD THIS
+      console.log("Messages received from Firebase:", msgs); 
       if (msgs.length > 0) {
         const latestMsg = msgs[msgs.length - 1];
         const myName = userRole === 'admin' ? "Admin" : currentUser?.name;
@@ -72,12 +71,10 @@ function App() {
 
         const isOtherPerson = latestMsg.senderId !== myName;
 
-        // If chat is CLOSED and someone else sent a message -> Show Dot
+        
         if (!isChatOpen && isOtherPerson) {
           setHasNewMessage(true);
         }
-        
-        // If chat is OPEN -> Hide Dot
         if (isChatOpen) {
           setHasNewMessage(false);
         }
@@ -87,38 +84,37 @@ function App() {
 
     return () => unsubscribe();
   }, [isChatOpen, lastProcessedMsgId, userRole, currentUser?.name]);
-  // Added currentUser?.name specifically to the dependency array
+  
   useEffect(() => {
-    // We use messages[messages.length - 1] directly here to be safe
+    
     if (messages.length > 0) {
       setLastProcessedMsgId(messages[messages.length - 1].id);
       setHasNewMessage(false);
     }
   }, [userRole]);
-// --- ADD THIS AFTER THE USEEFFECT ---
+
 const sendMessage = async () => {
   if (!newMessageText.trim()) return;
 
   const myName = userRole === 'admin' ? "Admin" : (currentUser?.name || "Volunteer");
 
   try {
-    // We're using a plain JS date first to see if it fixes the "ghost" issue
     await addDoc(collection(db, "chats"), {
       text: newMessageText,
       senderId: myName,
       timestamp: serverTimestamp(), 
     });
 
-    setNewMessageText(""); // This clears the box
+    setNewMessageText(""); 
     console.log("SUCCESS: Message sent to 'chats' collection");
 
   } catch (error) {
     console.error("FIREBASE ERROR:", error.message);
-    alert("Check console: " + error.message); // This will pop up if it fails
+    alert("Check console: " + error.message);
   }
 };
 
-  // --- YOUR EXACT ORIGINAL FUNCTIONS ---
+  
   const handleAssign = (vol) => {
     setAssigned(prev => ({ ...prev, [vol.name]: true }));
     setTaskStatus(prev => ({ ...prev, [vol.name]: selectedState.stateName }));
@@ -238,8 +234,7 @@ const sendMessage = async () => {
                     />
                     <button 
                       onClick={() => {
-                        // .trim() removes any accidental spaces
-                        // .toLowerCase() ensures "Admin123" or "ADMIN123" still works
+                        
                         if (adminPass.trim().toLowerCase() === "admin123") {
                             setIsLoggedIn(true);
                             setUserRole('admin');
@@ -295,8 +290,7 @@ const sendMessage = async () => {
                                 const entered = String(volPass[v.name] || "").trim();
                                 const target = String(actualID).trim();
                                 
-                                // If they match, OR if you are in a hurry for the demo, 
-                                // you can add '|| entered === "123"' just for testing
+                               
                                 if (entered === target && target !== "N/A") {
                                   setCurrentUser(v);
                                   setUserRole('volunteer');
@@ -326,7 +320,7 @@ const sendMessage = async () => {
     );
     
   }
-// --- ADD THIS RIGHT BEFORE "if (userRole === 'volunteer')" ---
+
 
 // --- VOLUNTEER DASHBOARD VIEW ---
 if (userRole === 'volunteer') {
@@ -433,7 +427,7 @@ if (userRole === 'volunteer') {
                       </div>
 
                       <h4 className="font-black text-slate-900 text-lg mt-2">
-                        {/* Using your task map here */}
+                        
                         {taskActionMap[res.problem] || res.problem || "Active Task"}
                       </h4>
                       <p className="text-[10px] font-bold text-slate-400 uppercase">
@@ -505,7 +499,7 @@ if (userRole === 'volunteer') {
                   </div>
                 </div>
               ) : (
-                /* Fallback when tasks exist but none are clicked */
+                
                 <div className="h-[60vh] flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-[40px] bg-slate-50/50">
                   <p className="text-slate-500 font-black uppercase text-xs tracking-widest">Select a Case to Begin Work</p>
                 </div>
@@ -537,7 +531,7 @@ if (userRole === 'volunteer') {
           onClick={() => {
             setIsChatOpen(!isChatOpen);
             if (!isChatOpen) {
-              // When opening, clear the dot and mark the latest as 'seen'
+            
               setHasNewMessage(false); 
               if (messages.length > 0) {
                 setLastProcessedMsgId(messages[messages.length - 1].id);
@@ -552,7 +546,7 @@ if (userRole === 'volunteer') {
           )}
         </button>
 
-        {/* 2. THE CHAT WINDOW (Only shows if isChatOpen is true) */}
+        {/* 2. THE CHAT WINDOW  */}
         {isChatOpen && (
           <div className="absolute bottom-20 right-0 w-80 h-112.5 bg-blue-600 rounded-3xl shadow-2xl flex flex-col overflow-hidden border border-slate-200">
             
@@ -562,7 +556,7 @@ if (userRole === 'volunteer') {
               <button onClick={() => setIsChatOpen(false)}><X size={18} /></button>
             </div>
 
-            {/* Messages List (This is the part you already had) */}
+          
             <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-slate-50">
               {messages.map((m) => {
                 const isMe = m.senderId === (userRole === 'admin' ? "Admin" : currentUser?.name);
@@ -579,15 +573,15 @@ if (userRole === 'volunteer') {
               })}
             </div>
 
-            {/* Input Area - Place this right before the last </div> of the chat window */}
+           
             <div className="p-3 bg-white border-t flex gap-2">
               <input 
                 type="text"
-                value={newMessageText} // CRITICAL: This links the box to your state
-                onChange={(e) => setNewMessageText(e.target.value)} // Updates state as you type
+                value={newMessageText} 
+                onChange={(e) => setNewMessageText(e.target.value)} 
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
-                    e.preventDefault(); // Prevents page reload
+                    e.preventDefault(); 
                     sendMessage();
                   }
                 }}
@@ -795,15 +789,14 @@ if (userRole === 'volunteer') {
           </div>
         </div>
       </main>
-      {/* --- CHAT OVERLAY --- */}
+
       <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
         
-        {/* 1. THE FLOATING BUTTON */}
         <button 
           onClick={() => {
             setIsChatOpen(!isChatOpen);
             if (!isChatOpen) {
-              // When opening, clear the dot and mark the latest as 'seen'
+             
               setHasNewMessage(false); 
               if (messages.length > 0) {
                 setLastProcessedMsgId(messages[messages.length - 1].id);
@@ -818,7 +811,7 @@ if (userRole === 'volunteer') {
           )}
         </button>
 
-        {/* 2. THE CHAT WINDOW (Only shows if isChatOpen is true) */}
+        
         {isChatOpen && (
           <div className="absolute bottom-20 right-0 w-80 h-112.5 bg-white rounded-3xl shadow-2xl flex flex-col overflow-hidden border border-slate-200">
             
@@ -828,7 +821,6 @@ if (userRole === 'volunteer') {
               <button onClick={() => setIsChatOpen(false)}><X size={18} /></button>
             </div>
 
-            {/* Messages List (This is the part you already had) */}
             <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-slate-50">
               {messages.map((m) => {
                 const isMe = m.senderId === (userRole === 'admin' ? "Admin" : currentUser?.name);
@@ -845,15 +837,15 @@ if (userRole === 'volunteer') {
               })}
             </div>
 
-            {/* Input Area - Place this right before the last </div> of the chat window */}
+          
             <div className="p-3 bg-white border-t flex gap-2">
               <input 
                 type="text"
-                value={newMessageText} // CRITICAL: This links the box to your state
-                onChange={(e) => setNewMessageText(e.target.value)} // Updates state as you type
+                value={newMessageText}
+                onChange={(e) => setNewMessageText(e.target.value)}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
-                    e.preventDefault(); // Prevents page reload
+                    e.preventDefault();
                     sendMessage();
                   }
                 }}
