@@ -1,6 +1,6 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const genAI = new GoogleGenerativeAI("AIzaSyDARbWMbJ45FtNcLTURAPqUm3Wln2njrM4");
+const genAI = new GoogleGenerativeAI("AIzaSyAy7ChuwwnCquI5USozlzNZS-5jA1IHzX8");
 
 export async function analyzeReport(imagePart) {
   try {
