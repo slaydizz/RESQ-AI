@@ -501,14 +501,7 @@ if (userRole === 'volunteer') {
                       </tbody>
                     </table>
                     
-                    {/* Chat/Alert Area */}
-                    <div className="mt-6 border-t pt-6">
-                      <p className="text-[10px] font-black text-slate-500 uppercase mb-3">Ask Help</p>
-                      <div className="flex gap-2">
-                        <input type="text" placeholder="Need extra supplies?..." className="flex-1 bg-slate-50 border border-slate-200 rounded-2xl p-4 text-sm font-medium outline-none focus:ring-2 ring-blue-500 transition-all" />
-                        <button className="bg-slate-700 text-white px-8 py-2 rounded-2xl text-[12px] font-black uppercase hover:bg-blue-600 transition-all shadow-lg">Send Alert</button>
-                      </div>
-                    </div>
+                    
                   </div>
                 </div>
               ) : (
