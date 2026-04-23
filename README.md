@@ -1,6 +1,6 @@
 RESQ-AI 🚀 : "Turning Chaos into Coordination."
 
-⚡ The Vision
+⚡ The Vision :
 When a disaster strikes, the first 60 minutes are the most critical. Currently, NGOs lose this "Golden Hour" to messy spreadsheets, 
 fragmented WhatsApp groups, and information overload. RESQ-AI replaces the chaos with a unified, AI-powered nerve center.
 
