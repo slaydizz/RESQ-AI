@@ -12,7 +12,7 @@ import {
   serverTimestamp 
 } from "firebase/firestore";
 import { MessageCircle} from 'lucide-react';
-import { MessageSquare, X, Send } from 'lucide-react'; // If you don't have lucide-react, install it or use SVG
+import { MessageSquare, X, Send } from 'lucide-react'; 
 function App() {
   
   // --- AUTH & VIEW STATES ---
@@ -25,14 +25,14 @@ function App() {
   const [lastProcessedMsgId, setLastProcessedMsgId] = useState(null);
   const [selectedTask, setSelectedTask] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userRole, setUserRole] = useState(null); // 'admin' or 'volunteer'
+  const [userRole, setUserRole] = useState(null); 
   const [currentUser, setCurrentUser] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [adminPass, setAdminPass] = useState("");
   const [volPass, setVolPass] = useState({});
   const [respondents, setRespondents] = useState([]);
-  const [lockedTasks, setLockedTasks] = useState({}); // Stores { taskId: volunteerName }
-  // --- YOUR EXACT ORIGINAL STATES ---
+  const [lockedTasks, setLockedTasks] = useState({}); 
+  
   const [assigned, setAssigned] = useState({});
   const [data, setData] = useState(null); 
   const [loading, setLoading] = useState(false);
